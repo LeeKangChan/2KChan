@@ -11,5 +11,3 @@ public class ServletInitializer extends SpringBootServletInitializer {
 	}
 
 }
-
-//123123
