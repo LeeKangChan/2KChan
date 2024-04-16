@@ -50,7 +50,7 @@
                 	</c:when>
                 	
                 	<c:otherwise>
-                		<form class="d-flex">
+                		<form class="d-flex" action="/login" method="post">
 		                    <button class="btn btn-outline-dark" type="submit">
 		                        <i class="bi-cart-fill me-1"></i>
 		                        로그인

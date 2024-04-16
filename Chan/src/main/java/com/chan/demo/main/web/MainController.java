@@ -1,7 +1,10 @@
 package com.chan.demo.main.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.chan.demo.member.service.LoginVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -10,33 +13,24 @@ import jakarta.servlet.http.HttpServletRequest;
 public class MainController {
 
 	
-	@RequestMapping(value="/")
+	@GetMapping("/")
 	public String Index(HttpServletRequest request, ModelMap model) {
-			
-			//LoginVO lVo = (LoginVO) request.getSession().getAttribute("Login");
-			
-//			String userChk = "N";
-			
-//			if(lVo != null) {
-//				userChk = "Y";
-//			}
-			
-//			model.addAttribute("userChk", userChk);
+		
 			return "index";
 		}
 	
-	@RequestMapping(value="/main")
+	@GetMapping("/main")
 	public String Main(HttpServletRequest request, ModelMap model) {
 			
-//		LoginVO lVo = (LoginVO) request.getSession().getAttribute("Login");
+		LoginVO lVo = (LoginVO) request.getSession().getAttribute("Login");
+		
+		String userChk = "N";
 			
-			String userChk = "N";
-			
-//			if(lVo != null) {
-//				userChk = "Y";
-//			}
-			
-			model.addAttribute("userChk", userChk);
-			return "main/main";
+		if(lVo != null) {
+			userChk = "Y";
 		}
+			
+		model.addAttribute("userChk", userChk);
+		return "main/main";
+	}
 }
