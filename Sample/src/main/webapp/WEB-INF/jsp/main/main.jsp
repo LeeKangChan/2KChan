@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%-- <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <head>
@@ -36,9 +36,7 @@
                     </li>
                 </ul>
                 
-                
-                
-               <c:choose>
+                <c:choose>
                 	<c:when test="${userChk == 'Y'}">
                 		<form class="d-flex">
 		                    <button class="btn btn-outline-dark" type="submit">
@@ -288,4 +286,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
       <script src="js/scripts.js"></script>
-</body>
+</body> --%>
+
+123123

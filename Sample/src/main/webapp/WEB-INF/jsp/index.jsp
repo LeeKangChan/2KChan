@@ -5,7 +5,7 @@
 <title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 </head>
-<body>
+<body>  
 <meta http-equiv="refresh" content="0;URL=/main" />
 </body>
 </html>
