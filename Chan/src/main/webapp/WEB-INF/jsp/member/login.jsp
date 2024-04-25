@@ -48,8 +48,7 @@
 				</div>
 				
 				<div class="button-login-box">
-					<button type="button" class="btn btn-primary btn-xs"
-						style="width: 100%">회원가입</button>
+					<button type="button" class="btn btn-primary btn-xs" onclick="location.href='/join'" style="width: 100%">회원가입</button>
 				</div>
 				
 				<div class="button-login-box">
@@ -69,6 +68,7 @@
 	<form name="loginForm" id="loginForm" action="/loginChk" method="post">
 		<input type="hidden" name="id" value="">
 		<input type="hidden" name="pwd" value="">
+		<input type="hidden" name="url" valye="${url}">
 	</form>
 
 	<!-- Bootstrap Bundle with Popper -->

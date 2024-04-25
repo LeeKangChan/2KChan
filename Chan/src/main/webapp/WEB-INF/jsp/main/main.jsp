@@ -40,29 +40,28 @@
                 
                <c:choose>
                 	<c:when test="${userChk == 'Y'}">
-                		<form class="d-flex">
-		                    <button class="btn btn-outline-dark" type="submit">
-		                        <i class="bi-cart-fill me-1"></i>
-		                        장바구니
-		                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-		                    </button>
-		                </form>
+	                    <button class="btn btn-outline-dark" type="submit">
+	                        <i class="bi-cart-fill me-1"></i>
+	                        장바구니
+	                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+	                    </button>
+	                    
+	                    <button class="btn btn-outline-dark" onclick="location.href='/logout'">
+	                        <i class="bi-cart-fill me-1"></i>
+	                        로그아웃
+	                    </button>
                 	</c:when>
                 	
                 	<c:otherwise>
-                		<form class="d-flex" action="/login" method="post">
-		                    <button class="btn btn-outline-dark" type="submit">
-		                        <i class="bi-cart-fill me-1"></i>
-		                        로그인
-		                    </button>
-		                </form>
+	                    <button class="btn btn-outline-dark" onclick="location.href='/login'">
+	                        <i class="bi-cart-fill me-1"></i>
+	                        로그인
+	                    </button>
 		                
-		                <form class="d-flex">
-		                    <button class="btn btn-outline-dark" type="submit">
-		                        <i class="bi-cart-fill me-1"></i>
-		                        회원가입
-		                    </button>
-		                </form>
+	                    <button class="btn btn-outline-dark" onclick="location.href='/join'">
+	                        <i class="bi-cart-fill me-1"></i>
+	                        회원가입
+	                    </button>
                 	</c:otherwise>
                 </c:choose>
             </div>
