@@ -1,19 +1,12 @@
 package com.chan.demo.member.service;
 
-
-import org.hibernate.annotations.GenericGenerator;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 @Entity
 public class Member {
 
-	@Column
-	private int num;
-	
 	@Id
 	private String id;
 	
@@ -58,14 +51,6 @@ public class Member {
 	
 	@Column
 	private String fail_date;
-
-	public int getNum() {
-		return num;
-	}
-
-	public void setNum(int num) {
-		this.num = num;
-	}
 
 	public String getId() {
 		return id;

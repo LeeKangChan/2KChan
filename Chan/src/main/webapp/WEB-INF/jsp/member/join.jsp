@@ -1,27 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
-<title>로그인</title>
-
-
-<!-- Bootstrap CSS -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-	crossorigin="anonymous">
-
-<!-- 나의 스타일 추가 -->
-<link rel="stylesheet" href="css/login.css?v=1234">
-
-</head>
+<c:import url="/header"/>
 <body class="text-center">
 
 	<!--  html 전체 영역을 지정하는 container -->
@@ -36,7 +18,7 @@
 				<div class="input-form-box">
 					<span>아이디</span>
 					<input type="text" id="id" class="form-control">
-					<button type="button" class="btn btn-primary btn-xs" onclick="idChk()" style="width:100%">아이디확인</button>
+					<button type="button" class="btn btn-primary btn-xs" onclick="idChk()" style="width:100%">아이디 확인</button>
 					<input type="hidden" id="idChk">
 				</div>
 				
@@ -59,13 +41,13 @@
 				
 				<div class="input-form-box">
 					<span>나이</span>
-					<input type="number" id="age" class="form-control">
+					<input type="text" id="age" class="form-control">
 				</div>
 				
 				<div class="input-form-box">
 					<span>성별</span>
-					남 <input type="radio" id="sex" value="M">
-					여 <input type="radio" id="sex" value="F">
+					남 <input type="radio" id="sexM" name="sexRadio" value="M">
+					여 <input type="radio" id="sexW" name="sexRadio" value="F">
 				</div>
 				
 				<div class="input-form-box">
@@ -80,11 +62,11 @@
 	
 				<div class="input-form-box">
 					<span>전화번호</span>
-					<input type="number" id="tel1" class="form-control" maxlength="3">
+					<input type="text" id="tel1" class="form-control" maxlength="3">
 					-
-					<input type="number" id="tel2" class="form-control" maxlength="4">
+					<input type="text" id="tel2" class="form-control" maxlength="4">
 					-
-					<input type="number" id="tel3" class="form-control" maxlength="4">
+					<input type="text" id="tel3" class="form-control" maxlength="4">
 				</div>
 				
 				<div class="input-form-box">
@@ -117,21 +99,15 @@
 		<input type="hidden" name="email1" value="">
 		<input type="hidden" name="email2" value="">
 	</form>
-
-	<!-- Bootstrap Bundle with Popper -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-		crossorigin="anonymous"></script>
 		
 	<script>
 	function idChk() {
 		var id = $("#id").val();
 		
-		var regExp = /^[a-z]+[a-z0-9]{5,19}$/g;
+		var regExp = /^[a-z]+[a-z0-9]{6,20}$/g;
 		
 		if(!regExp.test(id)) {
-			$("#msg").text("아이디는 영문, 숫자를 포함하여 8~16자로 작성해 주세요.");
+			$("#msg").text("아이디는 영문, 숫자를 포함하여 6~20자로 작성해 주세요.");
 		} else {
 			$.ajax({
 				type : 'post',
@@ -143,7 +119,7 @@
 						$("#msg").text("사용 가능한 아이디 입니다.");
 						$("#idChk").val("Y");
 					} else {
-						$("#msg").text("중복된 아이디 입니다.");
+						$("#msg").text(res);
 					}
 				},
 				error : function(XMLHttpRequest, textStatus, errorThrown){ 
@@ -155,11 +131,12 @@
 	
 	function joinChk() {
 		var id = $("#id").val();
+		var idChk = $("#idChk").val();
 		var pwd = $("#pwd").val();
 		var pwdChk = $("#pwdChk").val();
 		var name = $("#name").val();
 		var age = $("#age").val();
-		var sex = $("#sex").val();
+		var sex = $('input[name="sexRadio"]:checked').val();
 		var birth = $("#birth").val();
 		var post = $("#post").val();
 		var tel1 = $("#tel1").val();
@@ -168,13 +145,23 @@
 		var email1 = $("#email1").val();
 		var email2 = $("#email2").val();
 		
+		var regExp = /^[0-9]*$/;
+		var pwdRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[~!@#$%^&*]).{8,16}$/;
 		
 		if(id == null || id == '') {
 			alert("아이디를 입력해 주세요");
 			$("#id").focus();
 			return false;
+		} else if(idChk == null || idChk == '') {
+			alert("아이디확인을 해주세요");
+			$("#idChk").focus();
+			return false;
 		} else if(pwd == null || pwd == '') {
 			alert("비밀번호를 입력해 주세요");
+			$("#pwd").focus();
+			return false;
+		} else if(!pwdRegex.test(pwd)) {
+			alert("비밀번호는 영문, 숫자, 특수문자를 포함하여 8~16자로 입력해 주세요");
 			$("#pwd").focus();
 			return false;
 		} else if(pwdChk == null || pwdChk == '') {
@@ -193,6 +180,10 @@
 			alert("나이를 입력해 주세요");
 			$("#age").focus();
 			return false;
+		} else if(!regExp.test(age)) {
+			alert("나이는 숫자만 입력해 주세요");
+			$("#age").focus();
+			return false;
 		} else if(sex == null || sex == '') {
 			alert("성별을 선택해 주세요");
 			$("#sex").focus();
@@ -203,6 +194,10 @@
 			return false;
 		} else if(birth.length != 8) {
 			alert("생년월일은 8자로 입력해 주세요(ex:20001205)");
+			$("#birth").focus();
+			return false;
+		} else if(!regExp.test(birth)) {
+			alert("생년월일은 숫자만 입력해 주세요");
 			$("#birth").focus();
 			return false;
 		} else if(post == null || post == '') {
@@ -220,6 +215,10 @@
 		} else if(tel3 == null || tel3 == '') {
 			alert("전화번호를 입력해 주세요");
 			$("#tel3").focus();
+			return false;
+		} else if(!regExp.test(tel1) || !regExp.test(tel2) || !regExp.test(tel3)) {
+			alert("전화번호는 숫자만 입력해 주세요");
+			$("#tel1").focus();
 			return false;
 		} else if(email1 == null || email1 == '') {
 			alert("이메일을 입력해 주세요");
@@ -248,5 +247,5 @@
 	}
 </script>
 </body>
-</html>
 
+<c:import url="/footer"/>
