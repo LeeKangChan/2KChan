@@ -42,7 +42,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
@@ -52,11 +52,15 @@
                             <li><a class="dropdown-item" href="#!">인기 상품</a></li>
                             <li><a class="dropdown-item" href="#!">상품</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                 </ul>
 
                <c:choose>
                 	<c:when test="${userChk == 'Y'}">
+                		<button class="btn btn-outline-dark" onclick="location.href='/productReg'">
+	                        상품 등록
+	                    </button>
+	                    
 	                    <button class="btn btn-outline-dark" onclick="location.href='/myPageChk'">
 	                        마이페이지
 	                    </button>

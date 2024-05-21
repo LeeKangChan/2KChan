@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.chan.demo.common.FilterUtil;
+import com.chan.demo.member.repo.DelMemberRepo;
+import com.chan.demo.member.repo.MemberRepo;
 
 @Service
 public class MemberService {
@@ -17,7 +19,7 @@ public class MemberService {
 	@Autowired
 	private DelMemberRepo delMemberRepo;
     
-  //저장용
+	// 입력 정보 특수문자 제거
   	public Member enc(Member article) throws Exception {
   		
   		article.setId(FilterUtil.unscript(article.getId(),""));
@@ -33,12 +35,14 @@ public class MemberService {
   		return article;
   	}
 	
+  	// 회원가입
 	public String joinUser(Member member) {
 		
 		String pwd = member.getPwd();
 		String err = "";
 		
 		try {
+			// 비밀번호 암호화
 			pwd = FilterUtil.encryptPassword(pwd);
 			
 			member.setPwd(pwd);
@@ -53,6 +57,7 @@ public class MemberService {
 		return err;
 	}
 	
+	// 로그인 - 아이디 비밀번호 체크
 	public Member loginUser(Member member) {
 		String id = member.getId();
 		String pwd = member.getPwd();
@@ -71,6 +76,7 @@ public class MemberService {
 		}
 	}
 	
+	// 아이디 count
 	public int chkId(String id) {
 		
 		int cnt = 0;
@@ -80,6 +86,7 @@ public class MemberService {
 		return cnt;
 	}
 	
+	// 전화번호 count
 	public int chkTel(String tel) {
 		
 		int cnt = 0;
@@ -89,11 +96,13 @@ public class MemberService {
 		return cnt;
 	}
 	
+	// 아이디 비밀번호 count
 	public int countByIdAndPwd(String id, String pwd) {
 		
 		int cnt = 0;
 
 		try {
+			
 			pwd = FilterUtil.encryptPassword(pwd);
 			
 			cnt = memberRepo.countByIdAndPwd(id, pwd);
@@ -106,10 +115,12 @@ public class MemberService {
 		return cnt;
 	}
 	
+	// 회원 삭제
 	public void deleteById(String id) {
 		memberRepo.deleteById(id);
 	}
 	
+	// 아이디 찾기 - 이름, 생년월일, 전화번호, 이메일로 회원 찾기
 	public Member findId(String name, String birth, String tel, String email) {
 		Member findMem = new Member();
 		
@@ -118,6 +129,7 @@ public class MemberService {
 		return findMem;
 	}
 	
+	// 비밀번호 찾기 - 아이디, 이름, 생년월일, 전화번호, 이메일로 회원 찾기
 	public Member findPwd(String id, String name, String birth, String tel, String email) {
 		Member findMem = new Member();
 		
@@ -126,6 +138,7 @@ public class MemberService {
 		return findMem;
 	}
 	
+	// 비밀번호 변경
 	public String changePwd(Member chMember) {
 		
 		String id = chMember.getId();
@@ -159,10 +172,10 @@ public class MemberService {
 		return "";
 	}
 	
+	// 회원 정보 수정
 	public String modUser(Member chMember) {
 		
 		String id = chMember.getId();
-		
 		Optional<Member> opMember  = memberRepo.findById(id);
 		
 		if(opMember.isEmpty()) { 
@@ -184,11 +197,18 @@ public class MemberService {
 		member.setMod_date(chMember.getMod_date());
 		member.setFail_cnt(0);
 		member.setFail_date("");
-		memberRepo.save(member);		
-
+		
+		memberRepo.save(member);
+		try {
+			member = enc(member);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
 		return "";
 	}
 	
+	// 로그인 실패
 	public void failId(String id) {
 		
 		Optional<Member> opMember  = memberRepo.findById(id);
@@ -204,10 +224,12 @@ public class MemberService {
 			failCnt = member.getFail_cnt() + 1;
 			member.setFail_cnt(failCnt);
 			
+			// 로그인 실패 횟수 5회 미만이면 횟수 + 1
 			if(failCnt < 5) {	
 				memberRepo.save(member);
 			}
 			
+			// 로그인 실패 횟수 5회면 계정 잠금
 			if(failCnt == 5) {
 				LocalDateTime now = LocalDateTime.now();
 				today = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -218,6 +240,7 @@ public class MemberService {
 		}
 	}
 	
+	// 비밀번호 실패 카운트 초기화
 	public void resetFailCnt(String id) {
 		Optional<Member> opMember  = memberRepo.findById(id);
 		
@@ -233,6 +256,7 @@ public class MemberService {
 		}
 	}
 	
+	// 탈퇴 회원 로그 저장
 	public void delUserSave(DelMember delMem) {
 
 		delMemberRepo.save(delMem);

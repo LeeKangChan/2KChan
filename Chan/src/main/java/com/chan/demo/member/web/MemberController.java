@@ -27,9 +27,12 @@ public class MemberController {
 	@Autowired
     private MemberService memberService;
 	
+	// 로그인 페이지 이동
 	@RequestMapping("/login")
 	public String Login(HttpServletRequest request, ModelMap model) {
-			
+		
+		
+		// 로그인 세션 확인
 		Member member = (Member) request.getSession().getAttribute("Login");
 			
 		if(member != null) {
@@ -40,6 +43,7 @@ public class MemberController {
 		return "member/login";
 	}
 
+	// 아이디 비밀번호 확인
 	@RequestMapping("/loginChk")
 	public String LoginChk(HttpServletRequest request, ModelMap model) {
 			
@@ -54,6 +58,7 @@ public class MemberController {
 		String pwd = "";
 		String msg = "";
 		
+		// 아이디 비밀번호 파라미터 확인
 		if(request.getParameter("id") == null || request.getParameter("id").equals("")) {
 			msg = "아이디를 입력해 주세요";
 		}
@@ -75,6 +80,7 @@ public class MemberController {
 		loginMem.setId(id);
 		loginMem.setPwd(pwd);
 		
+		// 아이디 비밀번호 일치 확인
 		Member chkMember = memberService.loginUser(loginMem);
 		
 		//로그인 실패
@@ -96,6 +102,7 @@ public class MemberController {
 			return "inc/alert";
 		}
 		
+		// 로그인 실패 카운트 +1 (아이디가 일치하면)
 		memberService.resetFailCnt(id);
 		
 		chkMember.setPwd("");
@@ -105,6 +112,7 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
+	// 로그아웃
 	@RequestMapping("/logout")
 	public String Logout(HttpServletRequest request, ModelMap model) {
 			
@@ -115,13 +123,16 @@ public class MemberController {
 			return "inc/alert";
 		}
 		
+		// 로그인 세션 제거
 		HttpSession session = request.getSession();
 		session.removeAttribute("Login");
+		session.removeAttribute("MyPageChk");
 		
 		AlertUtil.returnAlert(model, "로그아웃 되었습니다.", "/", "url");
 		return "inc/alert";
 	}
 	
+	// 회원가입 페이지 이동
 	@RequestMapping("/join")
 	public String Join(HttpServletRequest request, ModelMap model) {
 			
@@ -135,6 +146,7 @@ public class MemberController {
 		return "member/join";
 	}
 	
+	// 회원가입 아이디 체크 ajax
 	@ResponseBody
 	@RequestMapping("/idChk")
 	public String IdChk(HttpServletRequest request, ModelMap model, @RequestParam("id") String id) {
@@ -148,12 +160,13 @@ public class MemberController {
 		
 		int cnt = 0;
 		
+		// 아이디 count
 		cnt = memberService.chkId(id);
 		
 		if(cnt != 0) {
 			chk = "N";
 			msg = "중복된 아이디 입니다.";
-		} else if(!FilterUtil.idchkmsg(id).equals("")) {
+		} else if(!FilterUtil.idchkmsg(id).equals("")) { // 아이디 규칙 체크
 			chk = "N";
 			msg = FilterUtil.idchkmsg(id);
 		}
@@ -165,6 +178,7 @@ public class MemberController {
 		return chk;
 	}
 	
+	// 회원가입 입력 정보 확인
 	@RequestMapping("/joinChk")
 	public String JoinChk(HttpServletRequest request, ModelMap model) {
 			
@@ -193,6 +207,7 @@ public class MemberController {
 		
 		String msg = "";
 		
+		// 파라미터 확인
 		if(request.getParameter("id") == null || request.getParameter("id").equals("")) {
 			msg = "아이디를 입력해 주세요";
 		}
@@ -244,7 +259,6 @@ public class MemberController {
 		if(request.getParameter("email2") == null || request.getParameter("email2").equals("")) {
 			msg = "이메일을 입력해 주세요";
 		}
-		
 		
 		if(!msg.equals("")) {
 			AlertUtil.returnAlert(model, msg, "history.back()", "script");
@@ -299,12 +313,14 @@ public class MemberController {
 		
 		int cnt = 0;
 		
+		// 아이디 중복 확인
 		cnt = memberService.chkId(id);
 		
 		if(cnt > 0) {
 			msg = "중복된 아이디 입니다.";
 		}
 		
+		// 전화번호 중복 확인
 		cnt = memberService.chkTel(tel);
 		
 		if(cnt > 0) {
@@ -316,8 +332,8 @@ public class MemberController {
 			return "inc/alert";
 		}
 		
+		// 오늘날짜
 		LocalDateTime now = LocalDateTime.now();
-		
 		String today = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		
 		Member joinMem = new Member();
@@ -338,6 +354,7 @@ public class MemberController {
 		joinMem.setFail_cnt(0);
 		joinMem.setFail_date("");
 		
+		// save
 		String err = memberService.joinUser(joinMem);
 		
 		if(err.equals("y")) {
@@ -349,6 +366,7 @@ public class MemberController {
 		return "inc/alert";
 	}
 
+	// 아이디 찾기 페이지 이동
 	@RequestMapping("/findId")
 	public String findId(HttpServletRequest request, ModelMap model) {
 			
@@ -362,6 +380,7 @@ public class MemberController {
 		return "member/findId";
 	}
 	
+	// 아이디 찾기 입력 정보 확인
 	@RequestMapping("/findIdChk")
 	public String FindIdChk(HttpServletRequest request, ModelMap model) {
 			
@@ -452,6 +471,7 @@ public class MemberController {
 		String id = "";
 		String chk = "";
 		
+		// 입력 정보 일치 회원 없음
 		if(findMem == null) {
 			AlertUtil.returnAlert(model, "회원을 찾을 수 없습니다.", "/findId", "url");
 			model.addAttribute("msg", "회원을 찾을 수 없습니다.");
@@ -469,6 +489,7 @@ public class MemberController {
 		}
 	}
 	
+	// 비밀번호 찾기 페이지 이동
 	@RequestMapping("/findPwd")
 	public String findPwd(HttpServletRequest request, ModelMap model) {
 			
@@ -482,6 +503,7 @@ public class MemberController {
 		return "member/findPwd";
 	}
 	
+	// 비밀번호 찾기 입력 정보 확인
 	@RequestMapping("/findPwdChk")
 	public String FindPwdChk(HttpServletRequest request, ModelMap model) {
 			
@@ -572,18 +594,21 @@ public class MemberController {
 		tel = tel1 + "-" + tel2 + "-" + tel3;
 		email = email1 + "@" + email2;
 		
+		// 입력 정보로 회원 찾기
 		Member findMem = new Member();
 		findMem = memberService.findPwd(id, name, birth, tel, email);
 		
 		if(findMem == null) {
-			AlertUtil.returnAlert(model, "이미 로그인된 회원이 있습니다.", "/", "url");
+			AlertUtil.returnAlert(model, "일치 하는 회원이 없습니다.", "/findPwd", "url");
 			return "inc/alert";
 		} else {
+			// 비밀번호 변경 페이지 이동 (비밀번호는 SHA-256 단방향 암호화 사용, 암호화된 비밀번호 복호화 불가능)
 			model.addAttribute("id", id);
 			return "member/findPwdResult";
 		}
 	}
 	
+	// 비밀번호 변경 입력 정보 확인
 	@RequestMapping("/changePwd")
 	public String ChangePwd(HttpServletRequest request, ModelMap model) {
 			
@@ -617,6 +642,7 @@ public class MemberController {
 		pwd = request.getParameter("pwd");
 		pwdChk = request.getParameter("pwdChk");
 		
+		// 아이디는 입력정보가 아닌 자동으로 넘어오는 정보, 파라미터가 없으면 잘못된 접근경로
 		if(id == null) {
 			AlertUtil.returnAlert(model, "잘못된 접근1", "/findPwd", "url");
 			return "inc/alert";
@@ -637,10 +663,8 @@ public class MemberController {
 		
 		
 		LocalDateTime now = LocalDateTime.now();
-		
 		String today = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-			
-		
+
 		Member changePwdMem = new Member();
 		
 		changePwdMem.setId(id);
@@ -648,13 +672,16 @@ public class MemberController {
 		changePwdMem.setMod_id(id);
 		changePwdMem.setMod_date(today);
 		
+		// 비밀번호 변경
 		String err = memberService.changePwd(changePwdMem);
-
+		
+		// 아이디와 일치하는 회원 정보가 없음
 		if(err.equals("null")) {
 			AlertUtil.returnAlert(model, "잘못된 접근2", "/findPwd", "url");
 			return "inc/alert";
 		}
 		
+		// 찾기 오류
 		if(err.equals("y")) {
 			AlertUtil.returnAlert(model, "비밀번호 찾기 오류! 담당자에게 문의 바랍니다.", "/", "url");
 			return "inc/alert";
@@ -664,6 +691,7 @@ public class MemberController {
 		return "inc/alert";
 	}
 	
+	// 마이페이지 페이지 이동
 	@RequestMapping("/myPageChk")
 	public String MyPageChk(HttpServletRequest request, ModelMap model) {
 			
@@ -677,6 +705,7 @@ public class MemberController {
 		return "member/myPageChk";
 	}
 	
+	// 마이페이지 본인 확인 입력 정보
 	@RequestMapping("/myPageChk1")
 	public String MyPageChk1(HttpServletRequest request, ModelMap model) {
 			
@@ -730,10 +759,12 @@ public class MemberController {
 			return "inc/alert";
 		}
 		
+		// 본인 확인 완료 세션
 		request.getSession().setAttribute("MyPageChk", "Y");
 		return "redirect:/myPage";
 	}
 	
+	// 마이페이지 이동
 	@RequestMapping("/myPage")
 	public String MyPage(HttpServletRequest request, ModelMap model) {
 		Member member = (Member) request.getSession().getAttribute("Login");
@@ -743,6 +774,7 @@ public class MemberController {
 			return "inc/alert";
 		}
 		
+		// 본인 확인 완료 세션 확인
 		String myPageChk = (String) request.getSession().getAttribute("MyPageChk");
 		
 		if(myPageChk == null || !myPageChk.equals("Y")) {
@@ -755,6 +787,7 @@ public class MemberController {
 		return "member/myPage";
 	}
 	
+	// 회원 정보 수정 페이지 이동
 	@RequestMapping("/modUser")
 	public String ModUser(HttpServletRequest request, ModelMap model) {
 			
@@ -808,6 +841,7 @@ public class MemberController {
 		return "member/modUser";
 	}
 	
+	// 회원 정보 수정 입력 정보 확인
 	@RequestMapping("/modUserChk")
 	public String ModUserChk(HttpServletRequest request, ModelMap model) {
 			
@@ -979,6 +1013,12 @@ public class MemberController {
 			return "inc/alert";
 		}
 		
+		if(err.equals("y")) {
+			AlertUtil.returnAlert(model, "회원 정보 수정 오류", "/", "url");
+			return "inc/alert";
+		}
+		
+		// 변경된 회원 정보로 세션 변경
 		HttpSession session = request.getSession();
 		session.removeAttribute("Login");
 		
@@ -988,6 +1028,7 @@ public class MemberController {
 		return "inc/alert";
 	}
 	
+	// 비밀번호 변경 페이지 이동
 	@RequestMapping("/modPwd")
 	public String ModPwd(HttpServletRequest request, ModelMap model) {
 		Member member = (Member) request.getSession().getAttribute("Login");
@@ -1009,6 +1050,7 @@ public class MemberController {
 		return "member/modPwd";
 	}
 	
+	// 비밀번호 변경 입력 정보 확인
 	@RequestMapping("/modPwdChk")
 	public String ModPwdChk(HttpServletRequest request, ModelMap model) {
 		Member member = (Member) request.getSession().getAttribute("Login");
@@ -1116,6 +1158,7 @@ public class MemberController {
 		return "inc/alert";
 	}
 	
+	// 회원 탈퇴 페이지 이동
 	@RequestMapping("/delUserChk")
 	public String DelUserChk(HttpServletRequest request, ModelMap model) {
 		Member member = (Member) request.getSession().getAttribute("Login");
@@ -1135,6 +1178,7 @@ public class MemberController {
 		return "member/delUserChk";
 	}
 	
+	// 회원 탈퇴 입력 정보 확인
 	@RequestMapping("/delUser")
 	public String DelUser(HttpServletRequest request, ModelMap model) {
 		Member member = (Member) request.getSession().getAttribute("Login");
@@ -1186,9 +1230,7 @@ public class MemberController {
 		}
 		
 		memberService.deleteById(id);
-		
-		
-		
+
 		LocalDateTime now = LocalDateTime.now();
 		String today = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		
@@ -1205,6 +1247,7 @@ public class MemberController {
 		delMem.setDel_id(member.getId());
 		delMem.setDel_date(today);
 		
+		// 탈퇴 회원 로그 저장
 		memberService.delUserSave(delMem);
 		
 		HttpSession session = request.getSession();
