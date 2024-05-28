@@ -1,4 +1,4 @@
-package com.chan.demo.member.service;
+package com.chan.demo.member.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,14 +14,14 @@ public class DelMember {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column
-	private String user_id;
+	@Column(name = "user_id")
+	private String userId;
 	
 	@Column
 	private String name;
 	
 	@Column
-	private int age;
+	private Integer age;
 	
 	@Column
 	private String sex;
@@ -38,11 +38,11 @@ public class DelMember {
 	@Column
 	private String email;
 
-	@Column
-	private String del_id;
+	@Column(name = "del_id")
+	private String delId;
 	
-	@Column
-	private String del_date;
+	@Column(name = "del_date")
+	private String delDate;
 
 	
 	public Long getId() {
@@ -53,12 +53,30 @@ public class DelMember {
 		this.id = id;
 	}
 
-	public String getUser_id() {
-		return user_id;
+	
+
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setUser_id(String user_id) {
-		this.user_id = user_id;
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getDelId() {
+		return delId;
+	}
+
+	public void setDelId(String delId) {
+		this.delId = delId;
+	}
+
+	public String getDelDate() {
+		return delDate;
+	}
+
+	public void setDelDate(String delDate) {
+		this.delDate = delDate;
 	}
 
 	public String getName() {
@@ -69,11 +87,11 @@ public class DelMember {
 		this.name = name;
 	}
 
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 
@@ -116,23 +134,5 @@ public class DelMember {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public String getDel_id() {
-		return del_id;
-	}
-
-	public void setDel_id(String del_id) {
-		this.del_id = del_id;
-	}
-
-	public String getDel_date() {
-		return del_date;
-	}
-
-	public void setDel_date(String del_date) {
-		this.del_date = del_date;
-	}
-
-
 	
 }

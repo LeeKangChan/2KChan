@@ -1,4 +1,4 @@
-package com.chan.demo.member.service;
+package com.chan.demo.member.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +16,7 @@ public class Member {
 	private String name;
 	
 	@Column
-	private int age;
+	private Integer age;
 	
 	@Column
 	private String post;
@@ -36,20 +36,20 @@ public class Member {
 	@Column
 	private String level;
 	
-	@Column
-	private String reg_date;
+	@Column(name = "reg_date")
+	private String regDate;
 	
-	@Column
-	private String mod_id;
+	@Column(name = "mod_id")
+	private String modId;
 	
-	@Column
-	private String mod_date;
+	@Column(name = "mod_date")
+	private String modDate;
 	
-	@Column
-	private int fail_cnt;
+	@Column(name = "fail_cnt")
+	private Integer failCnt;
 	
-	@Column
-	private String fail_date;
+	@Column(name = "fail_date")
+	private String failDate;
 
 	public String getId() {
 		return id;
@@ -75,11 +75,11 @@ public class Member {
 		this.name = name;
 	}
 
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 
@@ -131,45 +131,46 @@ public class Member {
 		this.level = level;
 	}
 
-	public String getReg_date() {
-		return reg_date;
+	public String getRegDate() {
+		return regDate;
 	}
 
-	public void setReg_date(String reg_date) {
-		this.reg_date = reg_date;
+	public void setRegDate(String regDate) {
+		this.regDate = regDate;
 	}
 
-	public String getMod_id() {
-		return mod_id;
+	public String getModId() {
+		return modId;
 	}
 
-	public void setMod_id(String mod_id) {
-		this.mod_id = mod_id;
+	public void setModId(String modId) {
+		this.modId = modId;
 	}
 
-	public String getMod_date() {
-		return mod_date;
+	public String getModDate() {
+		return modDate;
 	}
 
-	public void setMod_date(String mod_date) {
-		this.mod_date = mod_date;
+	public void setModDate(String modDate) {
+		this.modDate = modDate;
 	}
 
-	public int getFail_cnt() {
-		return fail_cnt;
+	public Integer getFailCnt() {
+		return failCnt;
 	}
 
-	public void setFail_cnt(int fail_cnt) {
-		this.fail_cnt = fail_cnt;
+	public void setFailCnt(Integer failCnt) {
+		this.failCnt = failCnt;
 	}
 
-	public String getFail_date() {
-		return fail_date;
+	public String getFailDate() {
+		return failDate;
 	}
 
-	public void setFail_date(String fail_date) {
-		this.fail_date = fail_date;
+	public void setFailDate(String failDate) {
+		this.failDate = failDate;
 	}
+
 
 	
 	

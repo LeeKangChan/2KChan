@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.chan.demo.common.AlertUtil;
 import com.chan.demo.common.FilterUtil;
 import com.chan.demo.common.StringUtil;
-import com.chan.demo.member.service.DelMember;
-import com.chan.demo.member.service.Member;
+import com.chan.demo.member.entity.DelMember;
+import com.chan.demo.member.entity.Member;
 import com.chan.demo.member.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -97,7 +97,7 @@ public class MemberController {
 		}
 		
 		//계정 정지
-		if(chkMember.getFail_cnt() == 5 || !chkMember.getFail_date().equals("")) {
+		if(chkMember.getFailCnt() == 5 || !chkMember.getFailDate().equals("")) {
 			AlertUtil.returnAlert(model, "로그인 5회 실패로 계정이 정지되었습니다. 비밀번호 찾기를 통해 본인인증 후 비밀번호를 변경해 주세요", "/findPwd", "url");
 			return "inc/alert";
 		}
@@ -155,7 +155,7 @@ public class MemberController {
 		String msg = "";
 		
 		if(id == null || id.equals("")) {
-			return chk;
+			return "아이디를 입력해 주세요";
 		}
 		
 		int cnt = 0;
@@ -348,11 +348,11 @@ public class MemberController {
 		joinMem.setBirth(birth);
 		joinMem.setEmail(email);
 		joinMem.setLevel("10");
-		joinMem.setReg_date(today);
-		joinMem.setMod_id("");
-		joinMem.setMod_date("");
-		joinMem.setFail_cnt(0);
-		joinMem.setFail_date("");
+		joinMem.setRegDate(today);
+		joinMem.setModId("");
+		joinMem.setModDate("");
+		joinMem.setFailCnt(0);
+		joinMem.setFailDate("");
 		
 		// save
 		String err = memberService.joinUser(joinMem);
@@ -669,8 +669,8 @@ public class MemberController {
 		
 		changePwdMem.setId(id);
 		changePwdMem.setPwd(pwd);
-		changePwdMem.setMod_id(id);
-		changePwdMem.setMod_date(today);
+		changePwdMem.setModId(id);
+		changePwdMem.setModDate(today);
 		
 		// 비밀번호 변경
 		String err = memberService.changePwd(changePwdMem);
@@ -1001,10 +1001,10 @@ public class MemberController {
 		modUserMem.setSex(sex);
 		modUserMem.setBirth(birth);
 		modUserMem.setEmail(email);
-		modUserMem.setMod_id(id);
-		modUserMem.setMod_date(today);
-		modUserMem.setFail_cnt(0);
-		modUserMem.setFail_date("");
+		modUserMem.setModId(id);
+		modUserMem.setModDate(today);
+		modUserMem.setFailCnt(0);
+		modUserMem.setFailDate("");
 		
 		String err = memberService.modUser(modUserMem);
 		
@@ -1135,8 +1135,8 @@ public class MemberController {
 		
 		changePwdMem.setId(id);
 		changePwdMem.setPwd(newPwd);
-		changePwdMem.setMod_id(id);
-		changePwdMem.setMod_date(today);
+		changePwdMem.setModId(id);
+		changePwdMem.setModDate(today);
 		
 		String err = memberService.changePwd(changePwdMem);
 
@@ -1236,7 +1236,7 @@ public class MemberController {
 		
 		DelMember delMem = new DelMember();
 		
-		delMem.setUser_id(member.getId());
+		delMem.setUserId(member.getId());
 		delMem.setName(member.getName());
 		delMem.setAge(member.getAge());
 		delMem.setSex(member.getSex());
@@ -1244,8 +1244,8 @@ public class MemberController {
 		delMem.setTel(member.getTel());
 		delMem.setPost(member.getPost());
 		delMem.setEmail(member.getEmail());
-		delMem.setDel_id(member.getId());
-		delMem.setDel_date(today);
+		delMem.setDelId(member.getId());
+		delMem.setDelDate(today);
 		
 		// 탈퇴 회원 로그 저장
 		memberService.delUserSave(delMem);

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.3</version>
+		<version>3.2.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.chan</groupId>
@@ -87,12 +87,6 @@
         	<groupId>org.apache.tomcat.embed</groupId>
         	<artifactId>tomcat-embed-jasper</artifactId>
     	</dependency>
-    	
-    	<!-- spring boot 3버전 이상에서 jstl사용시 아래 사용-->
-    	<!--<dependency>
-        	<groupId>org.glassfish.web</groupId>
-        	<artifactId>jakarta.servlet.jsp.jstl</artifactId>
-    	</dependency>-->
     	
     	<dependency>
 			<groupId>jakarta.servlet</groupId>

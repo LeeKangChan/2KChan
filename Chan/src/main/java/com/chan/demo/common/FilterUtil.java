@@ -178,5 +178,69 @@ public class FilterUtil {
 		
 		return new String(Base64.encodeBase64(hashValue));
     }
+	
+	/*인풋박스전용 : xss + tag 삭제*/
+    public static String untagscript(String data) {
+    	String str = unscript(data);
+    	str= removeTag(str);
+    	return str;    	
+    }
+    
+    /*xss*/
+    public static String unscript(String data) {
+    	if(data == null){return "";}
+    	if(data.length() == 0){return "";}
+        String ret = data;
+		Pattern SCRIPTS = Pattern.compile("<(no)?script[^>]*>.*?</(no)?script>", 32);
+        Pattern STYLE = Pattern.compile("<style[^>]*>.*</style>", 32);
+        Pattern Title = Pattern.compile("<title[^>]*>.*</title>", 32);         
+        Pattern patternDocumentCookie=Pattern.compile("(?i)document\\.cookie");        
+        Matcher m = SCRIPTS.matcher(ret);
+        ret = m.replaceAll("");
+        m = STYLE.matcher(ret);
+        ret = m.replaceAll("");
+        m = Title.matcher(ret);
+        ret = m.replaceAll("");        
+        m = patternDocumentCookie.matcher(ret);
+        ret = m.replaceAll("");    
+       
+		ret = ret.replaceAll("<(/)?(S|s)(C|c)(R|r)(I|i)(P|p)(T|t)([^>]+)?(/)?>", "");
+		ret = ret.replaceAll("<(/)?(O|o)(B|b)(J|j)(E|e)(C|c)(T|t)([^>]+)?(/)?>", "");
+		ret = ret.replaceAll("<(/)?(A|a)(P|p)(P|p)(L|l)(E|e)(T|t)([^>]+)?(/)?>", "");
+		ret = ret.replaceAll("<(/)?(E|e)(M|m)(B|b)(E|e)(D|d)([^>]+)?(/)?>", "");
+		ret = ret.replaceAll("<(/)?(F|f)(O|o)(R|r)(M|m)([^>]+)?(/)?>", ""); 
+ 		ret = ret.replaceAll("<(/)?(M|m)(E|e)(T|t)(A|a)([^>]+)?(/)?>", ""); 
+ 		ret = ret.replaceAll("<(/)?(M|m)(E|e)(T|t)(A|a)", "");		
+        String value=ret;
+        String ch = "onabort|onactivate|onafterprint|onafterupdate|onbeforeactivate|onbeforecopy|onbeforecut|onbeforedeactivate|onbeforeeditfocus|onbeforepaste|onbeforeprint|onbeforeunload|onbeforeupdate|onbegin|onblur|onbounce|oncellchange|onchange|onclick|oncontentready|oncontentsave|oncontextmenu|oncontrolselect|oncopy|oncut|ondataavailable|ondatasetchanged|ondatasetcomplete|ondblclick|ondeactivate|ondetach|ondocumentready|ondrag|ondragdrop|ondragend|ondragenter|ondragleave|ondragover|ondragstart|ondrop|onend|onerror|onerrorupdate|onfilterchange|onfinish|onfocus|onfocusin|onfocusout|onhelp|onhide|onkeydown|onkeypress|onkeyup|onlayoutcomplete|onload|onlosecapture|onmediacomplete|onmediaerror|onmedialoadfailed|onmousedown|onmouseenter|onmouseleave|onmousemove|onmouseout|onmouseover|onmouseup|onmousewheel|onmove|onmoveend|onmovestart|onopenstatechange|onoutofsync|onpaste|onpause|onplaystatechange|onpropertychange|onreadystatechange|onrepeat|onreset|onresize|onresizeend|onresizestart|onresume|onreverse|onrowclick|onrowenter|onrowexit|onrowout|onrowover|onrowsdelete|onrowsinserted|onsave|onscroll|onseek|onselect|onselectionchange|onselectstart|onshow|onstart|onstop|onsubmit|onsyncrestored|ontimeerror|ontrackchange|onunload|onurlflip|cookie|document|javascript|alert|script|meta|prompt|prompt|http-equiv|javascript|eval|onactive|expression|charset|applet|onafteripudate|meta|string|xml|create|blink|append|ondbclick|link|binding|alert|ondatasetchaged|msgbox|cnbeforeprint|embed|refresh|cnbeforepaste|onmouseend|object|void|iframe|onbeforeuload|onuload|frame|frameset|ilayer|layer|bgsound|base|vbscript|onbefore|onfilterchage|oncontrolselected";
+        String[] ch_arr=ch.split("[|]"); 
+        int	c_int=-1;
+        int c_len=0;
+        int ch_max=ch_arr.length;
+        for(int s=0;s<ch_max;s++){
+        	String[] cc_int=value.toLowerCase().split(ch_arr[s]);
+        	if(cc_int.length>0){
+        		for(int ti=0;ti<cc_int.length;ti++){
+        			c_int=value.toLowerCase().indexOf(ch_arr[s]);
+                	c_len=ch_arr[s].length();
+                	if(c_int>-1 && c_len>0){
+                		value=value.replaceAll(value.substring(c_int,c_int+c_len),"");
+                		c_int=-1;
+                		c_len=0;
+                	}
+                			
+        		}
+        	}
+        }         
+        ret=value;
+        return ret;
+    }
+    
+    public  static String removeTag(String html)  {
+    	html = html.replaceAll("&nbsp;"," ");
+    	html = html.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+    	html = html.replaceAll("<[^>]*>", " ");
+		return html;
+	}
 	    
 }

@@ -3,7 +3,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.chan.demo.member.service.Member;
+import com.chan.demo.member.entity.Member;
 
 import jakarta.servlet.http.HttpServletRequest;
 

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.chan.demo.common.FilterUtil;
+import com.chan.demo.member.entity.DelMember;
+import com.chan.demo.member.entity.Member;
 import com.chan.demo.member.repo.DelMemberRepo;
 import com.chan.demo.member.repo.MemberRepo;
 
@@ -159,10 +161,10 @@ public class MemberService {
 			pwd = FilterUtil.encryptPassword(pwd);
 			
 			member.setPwd(pwd);
-			member.setMod_id(member.getMod_id());
-			member.setMod_date(chMember.getMod_date());			
-			member.setFail_cnt(0);
-			member.setFail_date("");
+			member.setModId(member.getModId());
+			member.setModDate(chMember.getModDate());			
+			member.setFailCnt(0);
+			member.setFailDate("");
 			memberRepo.save(member);		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -193,10 +195,10 @@ public class MemberService {
 		member.setSex(chMember.getSex());
 		member.setBirth(chMember.getBirth());
 		member.setEmail(chMember.getEmail());
-		member.setMod_id(chMember.getMod_id());
-		member.setMod_date(chMember.getMod_date());
-		member.setFail_cnt(0);
-		member.setFail_date("");
+		member.setModId(chMember.getModId());
+		member.setModDate(chMember.getModDate());
+		member.setFailCnt(0);
+		member.setFailDate("");
 		
 		memberRepo.save(member);
 		try {
@@ -221,8 +223,8 @@ public class MemberService {
 			
 			member = opMember.get();
 
-			failCnt = member.getFail_cnt() + 1;
-			member.setFail_cnt(failCnt);
+			failCnt = member.getFailCnt() + 1;
+			member.setFailCnt(failCnt);
 			
 			// 로그인 실패 횟수 5회 미만이면 횟수 + 1
 			if(failCnt < 5) {	
@@ -234,7 +236,7 @@ public class MemberService {
 				LocalDateTime now = LocalDateTime.now();
 				today = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 				
-				member.setFail_date(today);
+				member.setFailDate(today);
 				memberRepo.save(member);
 			}
 		}
@@ -249,8 +251,8 @@ public class MemberService {
 			
 			member = opMember.get();
 			
-			member.setFail_cnt(0);
-			member.setFail_date("");
+			member.setFailCnt(0);
+			member.setFailDate("");
 
 			memberRepo.save(member);
 		}

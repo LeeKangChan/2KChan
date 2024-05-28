@@ -41,7 +41,7 @@
 	    </dl>
 		<dl>
 	    	<dt>회원가입일</dt>
-	        <dd>${member.reg_date}</dd>
+	        <dd>${member.regDate}</dd>
 	    </dl>
 	    
 		<button class="btn btn-outline-dark" onclick="location.href='/modUser'">
