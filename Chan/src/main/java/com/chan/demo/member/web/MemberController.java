@@ -84,9 +84,17 @@ public class MemberController {
 		Member chkMember = memberService.loginUser(loginMem);
 		
 		//로그인 실패
-		if(chkMember == null) {			
+		if(chkMember == null) {
 			memberService.failId(id);
 			AlertUtil.returnAlert(model, "아이디 또는 비밀번호를 확인해 주세요. 로그인 5회 실패시 계정이 정지됩니다.", "/login", "url");
+			return "inc/alert";
+		}
+		
+		// 관리자계정 확인
+		String level = chkMember.getLevel();
+
+		if(level.equals("1") || level.equals("2")) {
+			AlertUtil.returnAlert(model, "사용할 수 없는 계정입니다.", "/login", "url");
 			return "inc/alert";
 		}
 		
@@ -179,8 +187,196 @@ public class MemberController {
 	}
 	
 	// 회원가입 입력 정보 확인
-	@RequestMapping("/joinChk")
-	public String JoinChk(HttpServletRequest request, ModelMap model) {
+		@RequestMapping("/joinChk1")
+		public String JoinChk1(HttpServletRequest request, ModelMap model) {
+				
+			Member member = (Member) request.getSession().getAttribute("Login");
+				
+			if(member != null) {
+				AlertUtil.returnAlert(model, "이미 로그인된 회원이 있습니다.", "/", "url");
+				return "inc/alert";
+			} 
+			
+			String id = "";
+			String pwd = "";
+			String pwdChk = "";
+			String name = "";
+			int age = 0;
+			String post = "";
+			String tel = "";
+			String tel1 = "";
+			String tel2 = "";
+			String tel3 = "";
+			String sex = "";
+			String birth = "";
+			String email = "";
+			String email1 = "";
+			String email2 = "";
+			
+			String msg = "";
+			
+			// 파라미터 확인
+			if(request.getParameter("id") == null || request.getParameter("id").equals("")) {
+				msg = "아이디를 입력해 주세요";
+			}
+			
+			if(request.getParameter("pwd") == null || request.getParameter("pwd").equals("")) {
+				msg = "비밀번호를 입력해 주세요";
+			}
+			
+			if(request.getParameter("pwdChk") == null || request.getParameter("pwdChk").equals("")) {
+				msg = "비밀번호확인을 입력해 주세요";
+			}
+			
+			if(request.getParameter("name") == null || request.getParameter("name").equals("")) {
+				msg = "이름을 입력해 주세요";
+			}
+			
+			if(request.getParameter("age") == null || request.getParameter("age").equals("")) {
+				msg = "나이를 입력해 주세요";
+			}
+			
+			if(request.getParameter("post") == null || request.getParameter("post").equals("")) {
+				msg = "주소를 입력해 주세요";
+			}
+			
+			if(request.getParameter("tel1") == null || request.getParameter("tel1").equals("")) {
+				msg = "전화번호를 입력해 주세요";
+			}
+			
+			if(request.getParameter("tel2") == null || request.getParameter("tel2").equals("")) {
+				msg = "전화번호를 입력해 주세요";
+			}
+			
+			if(request.getParameter("tel3") == null || request.getParameter("tel3").equals("")) {
+				msg = "전화번호를 입력해 주세요";
+			}
+			
+			if(request.getParameter("sex") == null || request.getParameter("sex").equals("")) {
+				msg = "성별을 선택해 주세요";
+			}
+			
+			if(request.getParameter("birth") == null || request.getParameter("birth").equals("")) {
+				msg = "생년월일를 입력해 주세요";
+			}
+			
+			if(request.getParameter("email1") == null || request.getParameter("email1").equals("")) {
+				msg = "이메일을 입력해 주세요";
+			}
+			
+			if(request.getParameter("email2") == null || request.getParameter("email2").equals("")) {
+				msg = "이메일을 입력해 주세요";
+			}
+			
+			if(!msg.equals("")) {
+				AlertUtil.returnAlert(model, msg, "history.back()", "script");
+				return "inc/alert";
+			}
+			
+			id = request.getParameter("id");
+			pwd = request.getParameter("pwd");
+			pwdChk = request.getParameter("pwdChk");
+			name = request.getParameter("name");
+			age = Integer.parseInt(request.getParameter("age"));
+			post = request.getParameter("post");
+			tel1 = request.getParameter("tel1");
+			tel2 = request.getParameter("tel2");
+			tel3 = request.getParameter("tel3");
+			sex = request.getParameter("sex");
+			birth = request.getParameter("birth");
+			email1 = request.getParameter("email1");
+			email2 = request.getParameter("email2");
+
+			if(!pwd.equals(pwdChk)) {
+				msg = "비밀번호가 서로 다릅니다. 다시 확인해 주세요";
+			}
+			
+			if(FilterUtil.strpwchk(pwd).equals("y") || pwd.length() < 8 || pwd.length() > 16) {
+				msg = "비밀번호는 영문, 숫자, 특수문자를 포함하여 8~16자로 입력해 주세요";
+			}
+			
+			if(!StringUtil.chkInt(age)) {
+				msg = "나이는 숫자만 입력 가능합니다.";
+			}
+			
+			if(!StringUtil.chkInt(birth)) {
+				msg = "생년월일은 숫자만 입력 가능합니다.";
+			}
+			
+			if(birth.length() != 8) {
+				msg = "생년월일은 8자로 입력해 주세요";
+			}
+			
+			if(!StringUtil.chkInt(tel1) || !StringUtil.chkInt(tel2) || !StringUtil.chkInt(tel3)) {
+				msg = "전화번호는 숫자만 입력 가능합니다.";
+			}
+			
+			if(!msg.equals("")) {
+				AlertUtil.returnAlert(model, msg, "history.back()", "script");
+				return "inc/alert";
+			}
+
+			tel = tel1 + "-" + tel2 + "-" + tel3;
+			email = email1 + "@" + email2;
+			
+			int cnt = 0;
+			
+			// 아이디 중복 확인
+			cnt = memberService.chkId(id);
+			
+			if(cnt > 0) {
+				msg = "중복된 아이디 입니다.";
+			}
+			
+			// 전화번호 중복 확인
+			cnt = memberService.chkTel(tel);
+			
+			if(cnt > 0) {
+				msg = "중복된 전화번호 입니다.";
+			}
+			
+			if(!msg.equals("")) {
+				AlertUtil.returnAlert(model, msg, "history.back()", "script");
+				return "inc/alert";
+			}
+			
+			// 오늘날짜
+			LocalDateTime now = LocalDateTime.now();
+			String today = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+			
+			Member joinMem = new Member();
+
+			joinMem.setId(id);
+			joinMem.setPwd(pwd);
+			joinMem.setName(name);
+			joinMem.setAge(age);
+			joinMem.setPost(post);
+			joinMem.setTel(tel);
+			joinMem.setSex(sex);
+			joinMem.setBirth(birth);
+			joinMem.setEmail(email);
+			joinMem.setLevel("10");
+			joinMem.setRegDate(today);
+			joinMem.setModId("");
+			joinMem.setModDate("");
+			joinMem.setFailCnt(0);
+			joinMem.setFailDate("");
+			
+			// save
+			String err = memberService.joinUser(joinMem);
+			
+			if(err.equals("y")) {
+				AlertUtil.returnAlert(model, "회원가입 오류! 담당자에게 문의 바랍니다.", "/", "url");
+				return "inc/alert";
+			}
+			
+			AlertUtil.returnAlert(model, "회원가입이 완료되었습니다.", "/login", "url");
+			return "inc/alert";
+		}
+	
+	// 회원가입 입력 정보 확인
+	@RequestMapping("/joinChk2")
+	public String JoinChk2(HttpServletRequest request, ModelMap model) {
 			
 		Member member = (Member) request.getSession().getAttribute("Login");
 			

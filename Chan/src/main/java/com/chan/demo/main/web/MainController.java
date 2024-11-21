@@ -28,7 +28,6 @@ public class MainController {
 	
 	@RequestMapping("/")
 	public String Index(HttpServletRequest request, ModelMap model) {
-		
 			return "index";
 		}
 	
@@ -58,8 +57,8 @@ public class MainController {
 			if(StringUtil.chkInt(strPageNum)) {
 				pageNum = Integer.parseInt(strPageNum);
 				
-				if(pageNum < 0) {
-					pageNum = 0;
+				if(pageNum < 1) {
+					pageNum = 1;
 				}
 			}
 		}
@@ -73,7 +72,7 @@ public class MainController {
 			block++;
 		}
 		
-		if(pageNum >= block) {
+		if(block > 1 && pageNum >= block) {
 			pageNum = block - 1;
 		}
 		
@@ -106,8 +105,7 @@ public class MainController {
 				}
 			}
 		}
-		
-		
+				
 		model.addAttribute("searchType", searchType);
 		model.addAttribute("searchContent", searchContent);
 		model.addAttribute("pageNum", pageNum);

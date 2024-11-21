@@ -10,8 +10,8 @@
     <header class="bg-dark py-5">
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">2K</h1>
-                <p class="lead fw-normal text-white-50 mb-0">연습용 중고 거래 사이트</p>
+                <h1 class="display-4 fw-bolder">Shop in style</h1>
+                <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
             </div>
         </div>
     </header>
@@ -70,26 +70,21 @@
             
             <nav>
 				<ul class="pagination" style="text-align:center;">
-					<c:if test="${pageNum > 1}">
-						<li class="page-item">
-							<a class="page-link" href="/main?pageNum=${(endPage - countPage)}&searchType=${searchType}&searchContent=${searchContent}" aria-label="Previous">
-				        		<span aria-hidden="true">&laquo;</span>
-				        	</a>
-						</li>
-					</c:if>
-					
+					<li class="page-item">
+						<a class="page-link" href="/main?pageNum=${(endPage - countPage)}&searchType=${searchType}&searchContent=${searchContent}" aria-label="Previous">
+			        		<span aria-hidden="true">&laquo;</span>
+			        	</a>
+					</li>
 			
 			    	<c:forEach var="i" begin="${startPage}" end="${endPage}">
 			        	<li class="page-item"><a class="page-link" href="/main?pageNum=${i-1}&searchType=${searchType}&searchContent=${searchContent}">${i}</a></li>
 			    	</c:forEach>
-					
-					<c:if test="${pageNum < endPage}">
-						<li class="page-item">
-				        	<a class="page-link" href="/main?pageNum=${startPage + countPage}&searchType=${searchType}&searchContent=${searchContent}" aria-label="Next">
-				            	<span aria-hidden="true">&raquo;</span>
-				        	</a>
-				    	</li>
-					</c:if>
+			
+			    	<li class="page-item">
+			        	<a class="page-link" href="/main?pageNum=${startPage + countPage}&searchType=${searchType}&searchContent=${searchContent}" aria-label="Next">
+			            	<span aria-hidden="true">&raquo;</span>
+			        	</a>
+			    	</li>
 				</ul>
 			</nav>
         </div>
@@ -111,4 +106,4 @@
     	}
     </script>
     
-    <c:import url="/footer"/>
+    <c:import url="././footer"/>

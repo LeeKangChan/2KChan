@@ -123,7 +123,11 @@ public class ProductController {
 				cnt = cnt + 1;
 				
 				// 경로는 개발 상황에 맞게 변경 필요
-				String uploadPath = System.getProperty("user.dir") + "\\src\\main\\webapp\\uploadFile\\product";
+				//String uploadPath = System.getProperty("user.dir") + "\\src\\main\\webapp\\uploadFile\\product";
+				String uploadPath = System.getProperty("user.dir");
+				
+				System.out.println("userdir : " + uploadPath);
+				
 				String savePath = "/uploadFile/product";
 				
                 // 폴더 생성
